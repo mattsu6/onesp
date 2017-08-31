@@ -23,15 +23,21 @@ class HomeController @Inject()(cc: ControllerComponents, ws: WSClient) extends A
     val creatives = Await.result(f, Duration.Inf).toMap
 
     // 各DSPにRTBリクエスト
-    val dspRes1 = Await.result(ws.url("http://localhost:9000/post/1").get(), Duration.Inf)
-    val dspRes2 = Await.result(ws.url("http://localhost:9000/post/2").get(), Duration.Inf)
-    val dspRes3 = Await.result(ws.url("http://localhost:9000/post/3").get(), Duration.Inf)
-    val dspRes4 = Await.result(ws.url("http://localhost:9000/post/4").get(), Duration.Inf)
+    val f1= ws.url("http://localhost:9000/post/1").get()
+    val f2 = ws.url("http://localhost:9000/post/1").get()
+    val f3 = ws.url("http://localhost:9000/post/1").get()
+    val f4 = ws.url("http://localhost:9000/post/1").get()
+    val dspRes1 = Await.result(f1, Duration.Inf)
+    val dspRes2 = Await.result(f2, Duration.Inf)
+    val dspRes3 = Await.result(f3, Duration.Inf)
+    val dspRes4 = Await.result(f4, Duration.Inf)
     val dspCreatives = Seq(dspRes1,dspRes2,dspRes3,dspRes4)
 
     // 各DSPの入札結果を元に内部オークション (今回はランダムオークション)
     val r = new Random()
     val i = r.nextInt(dspCreatives.length)
+
+    // 結果を返す
     Ok(views.html.adslot(dspCreatives(i).body, creatives((dspCreatives(i).json \ "image_id").as[Long])))
   }
 

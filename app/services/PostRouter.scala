@@ -11,7 +11,7 @@ import play.api.routing.sird._
   * Routes and URLs to the PostResource controller.
   */
 class PostRouter @Inject()(controller: PostController) extends SimpleRouter {
-  val prefix = "/v1/posts"
+  val prefix = "/post"
 
   def link(id: PostId): String = {
     s"${prefix}/${id.toString}"
